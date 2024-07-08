@@ -1,10 +1,12 @@
-const { gql } = require('apollo-server');
+const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   type Book {
     id: ID!
     title: String!
     author: Author!
+    reviews: [Review]!
+    averageRating: Float!
   }
 
   type Author {
@@ -17,6 +19,8 @@ const typeDefs = gql`
     id: ID!
     book: Book!
     rating: Float!
+    title: String!
+    description: String
   }
 
   type Query {
@@ -32,11 +36,11 @@ const typeDefs = gql`
     addBook(book: AddBookInput): Book
     updateBook(id: ID!, edits: UpdateBookInput): Book
     deleteBook(id: ID!): [Book]!
-    
+
     addAuthor(author: AddAuthorInput): Author
     updateAuthor(id: ID!, edits: UpdateAuthorInput!): Author
     deleteAuthor(id: ID!): [Author]!
-    
+
     addReview(review: AddReviewInput): Review
     updateReview(id: ID!, edits: UpdateReviewInput!): Review
     deleteReview(id: ID!): [Review]!
@@ -63,11 +67,14 @@ const typeDefs = gql`
   input AddReviewInput {
     book_id: ID!
     rating: Float!
+    title: String!
+    description: String
   }
 
   input UpdateReviewInput {
-    book_id: ID
     rating: Float
+    title: String
+    description: String
   }
 `;
 

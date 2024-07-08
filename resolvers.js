@@ -2,7 +2,7 @@ const db = require("./datasource");
 const {
   generateId,
   findById,
-  filterWithId,
+  filterWithKey,
   filterWithoutId,
 } = require("./utils");
 
@@ -11,10 +11,24 @@ const resolvers = {
     author: (parent) => {
       return findById(db.authors, parent.author_id);
     },
+    reviews: (parent) => {
+      return filterWithKey(db.reviews, "book_id", parent.id);
+    },
+    averageRating: (parent) => {
+      const bookReviews = filterWithKey(db.reviews, "book_id", parent.id);
+
+      if (!bookReviews.length) return 0;
+
+      const totalRating = bookReviews.reduce(
+        (sum, review) => sum + review.rating,
+        0
+      );
+      return totalRating / bookReviews.length;
+    },
   },
   Author: {
     books: (parent) => {
-      return db.books.filter((book) => book.author_id === parent.id);
+      return filterWithKey(db.books, "author_id", parent.id);
     },
   },
   Review: {
