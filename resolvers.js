@@ -113,9 +113,7 @@ const resolvers = {
 
     updateAuthor: (_, args) => {
       const { id, edits } = args;
-      console.log("updateAuthor", "db.authors", db.authors);
       const existingAuthor = findById(db.authors, id);
-      console.log("updateAuthor", "existingAuthor", existingAuthor);
       if (!existingAuthor)
         throw new Error(`Invalid Request - Missing Author against ID: ${id}`);
 
